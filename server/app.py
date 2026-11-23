@@ -1,7 +1,9 @@
 """
 Main FastAPI Application combining REST and GraphQL APIs.
 """
+import os
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
 from server.rest_routes import router as rest_router
@@ -24,6 +26,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/", response_class=HTMLResponse)
+def index_page():
+    html_file = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    if os.path.exists(html_file):
+        with open(html_file, "r") as f:
+            return f.read()
+    return "<h1>eCommerce QA API Online</h1>"
+
 
 # Mount REST routes
 app.include_router(rest_router)

@@ -172,3 +172,11 @@ class TestAuthRest:
         profile_resp = api_client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {access_token}"})
         profile_resp.assert_status(401)
         assert "Token has been revoked" in profile_resp.json()["detail"]
+
+    @pytest.mark.jira(ticket="UI-114", severity="P3")
+    @allure.title("TC-REST-14: Web UI Hub Dashboard returns 200 OK with HTML content")
+    def test_root_dashboard_html(self, api_client):
+        resp = api_client.get("/")
+        resp.assert_status(200)
+        assert "eCommerce QA Test Hub" in resp.text
+        assert "<html" in resp.text.lower()
