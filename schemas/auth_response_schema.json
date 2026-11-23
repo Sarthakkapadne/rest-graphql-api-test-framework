@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuthResponseSchema",
+  "type": "object",
+  "required": ["access_token", "refresh_token", "token_type", "user_id", "username", "role"],
+  "properties": {
+    "access_token": { "type": "string", "minLength": 10 },
+    "refresh_token": { "type": "string", "minLength": 10 },
+    "token_type": { "type": "string", "enum": ["bearer"] },
+    "expires_in": { "type": "integer" },
+    "user_id": { "type": "string" },
+    "username": { "type": "string" },
+    "role": { "type": "string", "enum": ["user", "admin"] }
+  },
+  "additionalProperties": false
+}

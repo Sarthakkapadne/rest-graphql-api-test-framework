@@ -1,0 +1,54 @@
+name: REST & GraphQL API Test Automation CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  api-tests:
+    name: Run REST & GraphQL Test Suite (60+ Scenarios)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Execute Pytest Suite with Jira Defect Classification
+        run: |
+          pytest -v \
+            --html=reports/report.html \
+            --self-contained-html \
+            --alluredir=reports/allure-results
+
+      - name: Upload Pytest HTML & Jira Defect Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-reports
+          path: |
+            reports/report.html
+            reports/jira_defect_report.html
+            reports/jira_defect_summary.md
+          retention-days: 14
+
+      - name: Upload Allure Results Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-raw-results
+          path: reports/allure-results
+          retention-days: 14

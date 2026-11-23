@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PaginatedProductsSchema",
+  "type": "object",
+  "required": ["total", "offset", "limit", "items"],
+  "properties": {
+    "total": { "type": "integer", "minimum": 0 },
+    "offset": { "type": "integer", "minimum": 0 },
+    "limit": { "type": "integer", "minimum": 1 },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "price", "category", "stock"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number" },
+          "category": { "type": "string" },
+          "stock": { "type": "integer" },
+          "created_at": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
